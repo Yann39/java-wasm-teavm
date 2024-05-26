@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello page</title>
+</head>
+<body>
+<section>
+    <strong>hello</strong>
+    <pre><code id="message"></code></pre>
+</section>
+
+<script>
+
+    function printMessage() {
+        console.log("Hello world from JS")
+    }
+
+    WebAssembly.instantiateStreaming(
+        fetch('wasm/hello.wasm'), {
+            env: {
+                printMessage
+            }
+        })
+        .then(module => {
+                console.log("Calling the Java method from JavaScript.")
+                module.instance.exports.hello()
+            }
+        );
+</script>
+
+</body>
+</html>
