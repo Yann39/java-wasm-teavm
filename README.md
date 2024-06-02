@@ -23,6 +23,7 @@ Testing **WebAssembly** in **Java** through **TeaVM**.
   * [Examples](#examples)
   * [Conclusion](#conclusion)
 * [Java - TeaVM](#java---teavm)
+  * [Usage](#usage)
 * [License](#license)
 
 # About the Project
@@ -34,6 +35,9 @@ Testing **WebAssembly** in **Java** through **TeaVM**.
     </td>
     <td>
         <img alt="WebAssembly logo" src="doc/logo-wasm.svg" height="64"/>
+    </td>
+    <td>
+        <img alt="Maven logo" src="doc/logo-maven.svg" height="42"/>
     </td>
   </tr>
 </table>
@@ -143,7 +147,7 @@ source : https://wasmlabs.dev/articles/docker-without-containers/
 
 ### Wasm workloads
 
-- Currently you need to activate the feature in Docker Desktop
+- Currently, you need to activate the feature in Docker Desktop
 
 - Then specify the runtime and platform at runtime :
 
@@ -265,9 +269,9 @@ List of projects made with WebAssembly : https://madewithwebassembly.com/
 
 Potential uses :
 
-- Training (Wordpress, Linux, Python, etc.)
+- Training, easily give users a ready-to-use environment (i.e. WordPress, Linux, Python, etc.)
 - Testing new architectures, new distributions, etc.
-- Libraries (shared across different systems / languages)
+- Libraries (shared across different systems / languages), even if TeaVM is not designed for this currently
 
 # Java - TeaVM
 
@@ -287,6 +291,8 @@ source : https://www.youtube.com/watch?v=MFruf7aqcbE
 </div>
 
 </div>
+
+## Usage
 
 Configuration is done via the Maven plugin `teavm-maven-plugin`, see [TeaVM](https://www.teavm.org/docs/tooling/maven.html).
 
