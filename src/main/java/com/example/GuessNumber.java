@@ -1,4 +1,4 @@
-package ch.unil;
+package com.example;
 
 import org.teavm.interop.Export;
 import org.teavm.interop.Import;

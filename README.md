@@ -1,6 +1,6 @@
 # Java WASM TeaVM
 
-Testing **WebAssembly** in **Java** through **TeaVM**.
+Exploring **WebAssembly** and testing in **Java** through **TeaVM**.
 
 ![Version](https://img.shields.io/badge/Version-0.0.3-2AAB92.svg)
 ![Static Badge](https://img.shields.io/badge/Last%20update-20%20Dec%202022-blue)

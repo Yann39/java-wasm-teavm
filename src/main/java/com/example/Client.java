@@ -1,4 +1,4 @@
-package ch.unil;
+package com.example;
 
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLElement;
