@@ -296,9 +296,13 @@ source : https://www.youtube.com/watch?v=MFruf7aqcbE
 
 Configuration is done via the Maven plugin `teavm-maven-plugin`, see [TeaVM](https://www.teavm.org/docs/tooling/maven.html).
 
-Simply compile the project to generate the WASM and JS binaries (depending on the configuration).
+Simply package the project to generate the WASM and JS binaries (depending on the configuration) :
 
-Then simply launch the html files in _target/webapp/js_ or _target/webapp/wasm_.
+```bash
+mvn clean package
+```
+
+Then copy the wanted HTML file into the _target/webapp/js_ or _target/webapp/wasm_ folder and launch it in your preferred browser.
 
 # License
 
