@@ -5,7 +5,7 @@ import org.teavm.jso.dom.html.HTMLElement;
 
 import static org.teavm.jso.browser.Window.alert;
 
-public class Client {
+public class ClientWasm {
 
     /**
      * TeaVM is not designed to port libraries, so we should always have a "main" method
@@ -18,7 +18,7 @@ public class Client {
         final HTMLElement div = document.createElement("div");
 
         final HTMLElement button = document.createElement("button");
-        button.setInnerText("Click me");
+        button.setInnerText("Say hello");
         button.addEventListener("click", event -> alert("Hello from JavaScript!"));
         button.setAttribute("style", "display:block; margin-top: 10px;");
 

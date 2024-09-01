@@ -42,13 +42,13 @@
         <executions>
 
           <execution>
-            <id>web-client-js</id>
+            <id>client-wasm</id>
             <goals>
               <goal>compile</goal>
             </goals>
             <configuration>
               <targetDirectory>${project.build.directory}/webapp/js</targetDirectory>
-              <mainClass>com.example.Client</mainClass>
+              <mainClass>com.example.ClientWasm</mainClass>
               <minifying>true</minifying>
               <debugInformationGenerated>true</debugInformationGenerated>
               <sourceMapsGenerated>false</sourceMapsGenerated>
@@ -66,20 +66,6 @@
               <mainClass>com.example.HelloWasm</mainClass>
               <targetDirectory>${project.build.directory}/webapp/wasm</targetDirectory>
               <targetFileName>hellowasm.wasm</targetFileName>
-              <targetType>WEBASSEMBLY</targetType>
-              <optimizationLevel>FULL</optimizationLevel>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>guess-number-wasm</id>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <targetDirectory>${project.build.directory}/webapp/wasm</targetDirectory>
-              <mainClass>com.example.GuessNumber</mainClass>
-              <targetFileName>guessNumber.wasm</targetFileName>
               <targetType>WEBASSEMBLY</targetType>
               <optimizationLevel>FULL</optimizationLevel>
             </configuration>
