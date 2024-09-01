@@ -21,14 +21,6 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- JavaScriptObjects (JSO) - a JavaScript binding for TeaVM -->
-    <dependency>
-      <groupId>org.teavm</groupId>
-      <artifactId>teavm-jso-apis</artifactId>
-      <version>${teavm.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
   </dependencies>
 
   <build>
@@ -42,13 +34,13 @@
         <executions>
 
           <execution>
-            <id>client-wasm</id>
+            <id>hello-js</id>
             <goals>
               <goal>compile</goal>
             </goals>
             <configuration>
               <targetDirectory>${project.build.directory}/webapp/js</targetDirectory>
-              <mainClass>com.example.ClientWasm</mainClass>
+              <mainClass>com.example.HelloJs</mainClass>
               <minifying>true</minifying>
               <debugInformationGenerated>true</debugInformationGenerated>
               <sourceMapsGenerated>false</sourceMapsGenerated>

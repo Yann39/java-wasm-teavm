@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TeaVM WASM Example</title>
-    <script src="wasm/sumwasm.wasm-runtime.js"></script>
+    <title>TeaVM WASM Example - Sum</title>
+    <script type="text/javascript" charset="utf-8" src="wasm/sumwasm.wasm-runtime.js"></script>
 </head>
 <body>
 
 <section>
-    <h1>TeaVM WASM Example</h1>
-    <p id="output"></p>
+    <h1>TeaVM WASM Example - Sum</h1>
+
+    <p>Sum of 10 + 20 is <span id="output1"></span></p>
 </section>
 
 <script>
@@ -25,7 +26,7 @@
                 const result = teavmInstance.instance.exports.add(10, 20);
 
                 // write the method result
-                document.getElementById('output').textContent = 'Result : ' + result;
+                document.getElementById('output1').textContent = result;
             }
         } catch (e) {
             console.error('Failed to load the WASM module', e);

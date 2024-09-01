@@ -24,6 +24,7 @@ Exploring **WebAssembly** and testing in **Java** through **TeaVM**.
   * [Conclusion](#conclusion)
 * [Java - TeaVM](#java---teavm)
   * [Minimal example](#minimal-example) 
+  * [Project's examples](#projects-examples)
   * [Usage](#usage)
 * [License](#license)
 
@@ -405,25 +406,76 @@ Here is a minimal example to compile a Java function into WebAssembly and then u
     Make sure to copy the HTML file in the proper location (above the _wasm_ directory containing the .wasm and .js files)
     then just run it with your preferred browser, it should display `Result : 30`.
 
-## Usage
+## Project's examples
 
 This project contains 3 examples :
-- ClientWasm
-- SumWasm
-- HelloWasm
+- `HelloJs` : compiled to Javascript, to demonstrate how to generate a JavaScript file from Java, that can be used from HTML
+- `SumWasm` : compiled to WASM, to demonstrate how to export a Java function to WebAssembly module and call it from Javascript
+- `HelloWasm` : compiled to WASM, to demonstrate how to export a Java function to WebAssembly module and call it from Javascript,
+   and also how to import a javascript function that can be redefined in JavaScript (2-way interaction)
 
+> [!NOTE]
+> The `HelloWasm` example does not work as expected (will display "undefined" instead of the hello world string),
+> this is because WebAssembly itself does not natively support string types (or any other complex data structures),
+> so managing strings between Java, WebAssembly and JavaScript involves some additional steps.
+> I think it's a bit of a tinkering, so I haven't gone any further for the moment, I prefer to wait for improvements to the framework so that this can be managed more easily.
 
 Configuration is done via the Maven plugin `teavm-maven-plugin`, see [TeaVM](https://www.teavm.org/docs/tooling/maven.html).
 
-The plugin defines an execution for each of the example.
+The plugin defines an execution for each of the example, you can at the configuration in the _pom.xml_.
 
-Simply package the project to generate the WASM and JS binaries (depending on the configuration) :
+Basically, for WASM examples, TeaVM compiles the Java class into a WASM binary,
+the JavaScript loads this WASM file, instantiate it, and call the exported methods.
+The result is displayed on the webpage.
+
+TeaVM automatically creates corresponding JS files containing the necessary JavaScript functions that the WebAssembly module requires,
+it also contains helpers to handle the instantiation and management of the WebAssembly module,
+this is why we load the corresponding JavaScript runtime file in each HTML file.
+
+In case you don't want to generate / include these files, you will need to define the imports manually, for example :
+
+```javascript
+// define the imports required by TeaVM, including the logInt, logString, and currentTimeMillis functions
+const imports = {
+    teavm: {
+        // provide the current time in milliseconds
+        currentTimeMillis: () => Date.now(),
+
+        // log strings passed from WASM to the browser's console
+        logString: (address) => {
+            const memory = instance.exports.memory;
+            const bytes = new Uint8Array(memory.buffer, address);
+            let str = '';
+            for (let i = 0; i < bytes.length && bytes[i] !== 0; i++) {
+                str += String.fromCharCode(bytes[i]);
+            }
+            console.log(str);
+        },
+
+        // log integers passed from WASM to the browser's console
+        logInt: (value) => {
+            console.log(value);
+        }
+        
+        ...
+    }
+};
+
+// instantiate the WebAssembly module with the imports
+const result = await WebAssembly.instantiate(bytes, imports);
+```
+
+## Usage
+
+Simply package the project to generate the WASM and JS binaries :
 
 ```bash
 mvn clean package
 ```
 
-Then copy the wanted HTML files into the _target/webapp/ folder and launch them in your preferred browser.
+The TeaVM Maven plugin will generate the files in the _target/webapp_ directory.
+
+Then copy the HTML files into the _target/webapp/_ folder and launch them in your preferred browser.
 
 # License
 

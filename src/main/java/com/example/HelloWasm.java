@@ -2,7 +2,6 @@ package com.example;
 
 import org.teavm.interop.Export;
 import org.teavm.interop.Import;
-import org.teavm.jso.JSBody;
 
 public class HelloWasm {
 
@@ -31,7 +30,6 @@ public class HelloWasm {
      * @param message The message to be printed
      */
     @Import(module = "env", name = "printMessage")
-    @JSBody(params = {"message"}, script = "printMessage(message)")
     private static native void printMessage(String message);
 
 }

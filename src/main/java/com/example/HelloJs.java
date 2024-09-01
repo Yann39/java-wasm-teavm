@@ -5,10 +5,10 @@ import org.teavm.jso.dom.html.HTMLElement;
 
 import static org.teavm.jso.browser.Window.alert;
 
-public class ClientWasm {
+public class HelloJs {
 
     /**
-     * TeaVM is not designed to port libraries, so we should always have a "main" method
+     * TeaVM is not designed to port libraries, so we should always have a {@code main} method.
      *
      * @param args Optional command line arguments
      */
@@ -20,7 +20,7 @@ public class ClientWasm {
         final HTMLElement button = document.createElement("button");
         button.setInnerText("Say hello");
         button.addEventListener("click", event -> alert("Hello from JavaScript!"));
-        button.setAttribute("style", "display:block; margin-top: 10px;");
+        button.setAttribute("style", "display:block; margin-top: 12px;");
 
         div.appendChild(document.createTextNode("I'm a TeaVM generated element"));
         div.appendChild(button);

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaVM WASM Example - Sum</title>
+    <script type="text/javascript" charset="utf-8" src="wasm/sumwasm.wasm-runtime.js"></script>
+</head>
+<body>
+
+<section>
+    <h1>TeaVM WASM Example - Sum</h1>
+
+    <input id="number1" type="number" value="0" onchange="computeSum();"/> +
+    <input id="number2" type="number" value="0" onchange="computeSum();"/> =
+    <input disabled id="output2" value="0"/>
+</section>
+
+<script>
+    var teavmInstanceGlobal;
+    async function loadWasm() {
+        teavmInstanceGlobal = await TeaVM.wasm.load('wasm/sumwasm.wasm');
+    }
+    function computeSum() {
+        var result = teavmInstanceGlobal.instance.exports.add(document.getElementById('number1').value, document.getElementById('number2').value);
+        document.getElementById('output2').value = result;
+    }
+    loadWasm();
+</script>
+
+</body>
+</html>
