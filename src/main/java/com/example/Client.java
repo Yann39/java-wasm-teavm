@@ -22,7 +22,7 @@ public class Client {
         button.addEventListener("click", event -> alert("Hello from JavaScript!"));
         button.setAttribute("style", "display:block; margin-top: 10px;");
 
-        div.appendChild(document.createTextNode("TeaVM generated element"));
+        div.appendChild(document.createTextNode("I'm a TeaVM generated element"));
         div.appendChild(button);
 
         document.getBody().appendChild(div);

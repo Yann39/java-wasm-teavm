@@ -28,12 +28,11 @@
     }
 
     WebAssembly.instantiateStreaming(
-        fetch('guessNumber.wasm'), {
+        fetch('wasm/guessNumber.wasm'), {
             env: {
                 setMagicNumber
             }
-        })
-        .then(module => {
+        }).then(module => {
                 console.log("Calling the Java method from JavaScript.")
                 module.instance.exports.getMagicNumber(10)
             }

@@ -4,31 +4,47 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello page</title>
+    <title>TeaVM WASM Hello Example</title>
+    <script src="wasm/hellowasm.wasm-runtime.js"></script>
 </head>
 <body>
+
 <section>
-    <strong>hello</strong>
-    <pre><code id="message"></code></pre>
+    <h1>TeaVM WASM Hello Example</h1>
+    <p id="output"></p>
 </section>
 
 <script>
-
-    function printMessage() {
-        console.log("Hello world from JS")
+    // define the function as expected by the WebAssembly module
+    function printMessage(message) {
+        console.log(message);
     }
 
-    WebAssembly.instantiateStreaming(
-        fetch('hello.wasm'), {
-            env: {
-                printMessage
+    async function loadWasm() {
+        try {
+
+            // use the load function provided by the TeaVM runtime to load the WASM module
+            const teavmInstance = await TeaVM.wasm.load('wasm/hellowasm.wasm', {
+                installImports: (imports, controller) => {
+                    // add the required imports to the 'env' module
+                    imports.env = {
+                        printMessage
+                    };
+                }
+            });
+
+            // use the instance's exports to call the method
+            if (teavmInstance.instance.exports.hello) {
+                const result = teavmInstance.instance.exports.hello();
+
+                // write the method result
+                document.getElementById('output').textContent = 'Result : ' + result;
             }
-        })
-        .then(module => {
-                console.log("Calling the Java method from JavaScript.")
-                module.instance.exports.hello()
-            }
-        );
+        } catch (e) {
+            console.error('Failed to load the WASM module', e);
+        }
+    }
+    loadWasm();
 </script>
 
 </body>

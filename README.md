@@ -23,6 +23,7 @@ Exploring **WebAssembly** and testing in **Java** through **TeaVM**.
   * [Examples](#examples)
   * [Conclusion](#conclusion)
 * [Java - TeaVM](#java---teavm)
+  * [Minimal example](#minimal-example) 
   * [Usage](#usage)
 * [License](#license)
 
@@ -264,7 +265,6 @@ List of projects made with WebAssembly : https://madewithwebassembly.com/
 - Despite the promise of speed, the tools I've tried are pretty slow
 - Most features are experimental, almost exclusively in preview or alpha versions
 - The standard is incomplete and continues to evolve (rapidly though)
-- Features such as the use of reflection require some tinkering
 - Difficult to debug and profile (lack of tools)
 
 Potential uses :
@@ -275,10 +275,10 @@ Potential uses :
 
 # Java - TeaVM
 
-Java bytecode compiler that emits JavaScript and/or WebAssembly to be executed in the browser.
+**TeamVM** is a **Java bytecode compiler** that emits JavaScript and/or WebAssembly to be executed in the browser.
 
-- Does not require source code, only compiled files (not like GWT, for example)
-- Also supports Kotlin and Scala
+- It does not require source code, only compiled files (not like GWT, for example)
+- it also supports Kotlin and Scala
 
 <div style="width:500px">
 
@@ -292,9 +292,130 @@ source : https://www.youtube.com/watch?v=MFruf7aqcbE
 
 </div>
 
+## Minimal example
+
+Here is a minimal example to compile a Java function into WebAssembly and then use it in JavaScript within an HTML file.
+
+1. Create a new **Maven** project. Here's a basic _pom.xml_ configuration that includes the `teavm-maven-plugin` to compile Java to WebAssembly :
+
+    ```xml
+    <project xmlns="http://maven.apache.org/POM/4.0.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+        <modelVersion>4.0.0</modelVersion>
+        <groupId>com.example</groupId>
+        <artifactId>teavm-wasm-example</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    
+        <dependencies>
+            <dependency>
+                <groupId>org.teavm</groupId>
+                <artifactId>teavm-classlib</artifactId>
+                <version>${teavm.version}</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.teavm</groupId>
+                    <artifactId>teavm-maven-plugin</artifactId>
+                    <version>0.9.2</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <configuration>
+                                <mainClass>com.example.HelloWasm</mainClass>
+                                <targetDirectory>${project.basedir}/src/main/webapp/wasm</targetDirectory>
+                                <targetFileName>helloworld</targetFileName>
+                                <targetType>WEBASSEMBLY</targetType>
+                                <optimizationLevel>FULL</optimizationLevel>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+    </project>
+    ```
+
+2. Create a minimal Java class with a simple static method that you want to compile to WebAssembly and export it :
+
+    ```java
+    package com.example;
+    
+    import org.teavm.interop.Export;
+    
+    public class HelloWasm {
+    
+        public static void main(String[] args) {}
+    
+        @Export(name = "add")
+        public static int add(int a, int b) {
+            return a + b;
+        }
+    
+    }
+    ```
+   
+    As stated in the docs, TeaVM is not designed to port libraries, so we should always have a "main" method, to serve as an entry point.
+
+3. Create the HTML and JavaScript to Use WASM :
+
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TeaVM WASM Example</title>
+        <script src="wasm/helloworld.wasm-runtime.js"></script>
+    </head>
+    <body>
+        <h1>TeaVM WASM Example</h1>
+        <p id="output"></p>
+        <script>
+            async function loadWasm() {
+                const teavmInstance = await TeaVM.wasm.load('wasm/sumwasm.wasm');
+                const result = teavmInstance.instance.exports.add(10, 20);
+                document.getElementById('output').textContent = 'Result : ' + result;
+            }
+            loadWasm();
+        </script>
+    </body>
+    </html>
+    ```
+   
+4. Build the project :
+
+    ```bash
+    mvn clean package
+    ```
+    
+    After building, the WebAssembly file _helloworld.wasm_ should be located in _src/main/webapp/wasm/_.
+    
+    It should also have generated a _helloworld.wasm-runtime.js_ file, designed to handle the instantiation and management of the WebAssembly module.
+    The script sets up necessary functions and imports, making it easier to work with the WebAssembly module (it is loaded in our HTML file).
+
+5. Run the HTML file :
+
+    Make sure to copy the HTML file in the proper location (above the _wasm_ directory containing the .wasm and .js files)
+    then just run it with your preferred browser, it should display `Result : 30`.
+
 ## Usage
 
+This project contains 3 examples :
+- ClientWasm
+- SumWasm
+- HelloWasm
+
+
 Configuration is done via the Maven plugin `teavm-maven-plugin`, see [TeaVM](https://www.teavm.org/docs/tooling/maven.html).
+
+The plugin defines an execution for each of the example.
 
 Simply package the project to generate the WASM and JS binaries (depending on the configuration) :
 
@@ -302,7 +423,7 @@ Simply package the project to generate the WASM and JS binaries (depending on th
 mvn clean package
 ```
 
-Then copy the wanted HTML file into the _target/webapp/js_ or _target/webapp/wasm_ folder and launch it in your preferred browser.
+Then copy the wanted HTML files into the _target/webapp/ folder and launch them in your preferred browser.
 
 # License
 

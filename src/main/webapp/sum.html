@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaVM WASM Example</title>
+    <script src="wasm/sumwasm.wasm-runtime.js"></script>
+</head>
+<body>
+
+<section>
+    <h1>TeaVM WASM Example</h1>
+    <p id="output"></p>
+</section>
+
+<script>
+    async function loadWasm() {
+        try {
+            // use the load function provided by the TeaVM runtime to load the WASM module
+            const teavmInstance = await TeaVM.wasm.load('wasm/sumwasm.wasm');
+
+            // use the instance's exports to call the method
+            if (teavmInstance.instance.exports.add) {
+                const result = teavmInstance.instance.exports.add(10, 20);
+
+                // write the method result
+                document.getElementById('output').textContent = 'Result : ' + result;
+            }
+        } catch (e) {
+            console.error('Failed to load the WASM module', e);
+        }
+    }
+    loadWasm();
+</script>
+
+</body>
+</html>
